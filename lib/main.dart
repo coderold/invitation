@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dart:math'; // Required for the random "No" messages
+import 'dart:math';
 
 void main() {
   runApp(const Invitation());
@@ -13,9 +13,9 @@ class Invitation extends StatefulWidget {
 }
 
 class _InvitationState extends State<Invitation> {
-  // 1. The "State" variables
   bool hasAccepted = false;
-  
+  int rejectionCount = 0; // The silent counter
+
   final List<String> noMessages = [
     "ahh may gamot? oki",
     "ahh aalis kayo? oki",
@@ -23,8 +23,12 @@ class _InvitationState extends State<Invitation> {
     "sure ka na ba dyan??",
   ];
 
-  // 2. The function to show the "No" popup
   void showNoPopup() {
+    // Increment the counter every time the popup is triggered
+    setState(() {
+      rejectionCount++;
+    });
+
     final randomMessage = noMessages[Random().nextInt(noMessages.length)];
     
     showDialog(
@@ -48,7 +52,6 @@ class _InvitationState extends State<Invitation> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          // Fixed Opacity from 100 to 1.0
           backgroundColor: const Color.fromRGBO(98, 71, 170, 1.0),
           title: const Text(
             'Invitation ni Matthew Molina',
@@ -60,7 +63,6 @@ class _InvitationState extends State<Invitation> {
             ),
           ),
         ),
-        // 3. Conditional Rendering: IF hasAccepted is true, show plans. ELSE show invite.
         body: Center(
           child: hasAccepted ? buildPlansPage() : buildInvitePage(),
         ),
@@ -68,7 +70,6 @@ class _InvitationState extends State<Invitation> {
     );
   }
 
-  // PAGE 1: The Invitation
   Widget buildInvitePage() {
     return Container(
       padding: const EdgeInsets.all(32),
@@ -100,33 +101,46 @@ class _InvitationState extends State<Invitation> {
           ),
           const SizedBox(height: 10),
           TextButton(
-            onPressed: showNoPopup,
-            child: const Text('No', style: TextStyle(color: Colors.grey)),
+            onPressed: showNoPopup, // Triggers the counter and the popup
+            child: const Text('No', style: TextStyle(color: Color.fromARGB(255, 117, 0, 0))),
           ),
         ],
       ),
     );
   }
 
-  // PAGE 2: The Plans
   Widget buildPlansPage() {
     return Container(
       padding: const EdgeInsets.all(32),
       decoration: BoxDecoration(
-        color: const Color.fromRGBO(207, 234, 214, 1.0), // Light green for success
+        color: const Color.fromRGBO(207, 234, 214, 1.0),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        children: const [
-          Text(
+        children: [
+          const Text(
             'Dapat Lang😎',
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
-          SizedBox(height: 20),
-          Text('Di ko po alam anong oras ka pa available,'),
-          Text('basta may pasok ako bukas 1-7pm'),
-          Text('tapos pwede na tayo maglambingan 😘'),
+          const SizedBox(height: 20),
+          const Text('Di ko po alam anong oras ka pa available,'),
+          const Text('basta may pasok ako bukas 1-7pm'),
+          const Text('tapos pwede na tayo maglambingan 😘'),
+          
+          // The Funny Reveal: Only shows if she pressed "No" at least once
+          if (rejectionCount > 0) ...[
+            const SizedBox(height: 30),
+            const Divider(color: Colors.black26),
+            Text(
+              'Ilang beses ka nag no hahah: $rejectionCount',
+              style: const TextStyle(
+                color: Colors.redAccent,
+                fontSize: 13,
+                fontStyle: FontStyle.italic,
+              ),
+            ),
+          ],
         ],
       ),
     );
