@@ -90,6 +90,14 @@ class _InvitationState extends State<Invitation> {
             ),
           ),
           const SizedBox(height: 20),
+          
+          TextButton(
+            onPressed: showNoPopup, // Triggers the counter and the popup
+            child: const Text('No', style: TextStyle(color: Color.fromARGB(255, 117, 0, 0))),
+          ),
+          
+          const SizedBox(height: 10),
+
           ElevatedButton(
             onPressed: () {
               setState(() {
@@ -98,11 +106,6 @@ class _InvitationState extends State<Invitation> {
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
             child: const Text('YES', style: TextStyle(color: Colors.white)),
-          ),
-          const SizedBox(height: 10),
-          TextButton(
-            onPressed: showNoPopup, // Triggers the counter and the popup
-            child: const Text('No', style: TextStyle(color: Color.fromARGB(255, 117, 0, 0))),
           ),
         ],
       ),
